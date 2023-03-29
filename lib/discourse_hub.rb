@@ -20,7 +20,9 @@ module DiscourseHub
 
   def self.get_payload
     if SiteSetting.share_anonymized_statistics && stats_fetched_at < 7.days.ago
-      About.fetch_cached_stats.symbolize_keys
+      payload = About.fetch_cached_stats.symbolize_keys
+      payload[:locale_usage] = payload[:locale_usage]&.to_json
+      payload
     else
       {}
     end
